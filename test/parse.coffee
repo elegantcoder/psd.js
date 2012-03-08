@@ -1,9 +1,10 @@
 fs = require 'fs'
+Canvas = require 'canvas'
+Image = Canvas.Image
 
 {PSD} = require __dirname + '/../lib/psd.js'
 
+PSD.DEBUG = true
+
 psd = PSD.fromFile __dirname + '/test.psd'
 psd.parse()
-
-fs.writeFile __dirname + '/output.json', JSON.stringify(psd, null, 2), ->
-  console.log "Output written to output.json"

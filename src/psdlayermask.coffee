@@ -12,6 +12,9 @@ class PSDLayerMask
     # Additional layer information
     @extras = []
 
+  # Skip over this section and don't parse it
+  skip: -> @file.seek @file.readUInt()
+
   parse: ->
     # Read the size of the entire layers and masks section
     maskSize = @file.readUInt()
@@ -52,6 +55,12 @@ class PSDLayerMask
           layer = new PSDLayer @file
           layer.parse(i)
           @layers.push layer
+
+        for layer in @layers
+          layer.image = new PSDImage(@file, @header, layer)
+          layer.image.parse()
+
+        # TODO : layers.reverse()
 
     # Temporarily skip the rest of layers & masks section
     @file.seek endLoc, false
